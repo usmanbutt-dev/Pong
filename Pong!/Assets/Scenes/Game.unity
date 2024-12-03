@@ -806,7 +806,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &754897450
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -814,7 +814,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 754897449}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 16b2cef68749eb1479e9e22bc3e902a6, type: 3}
   m_Name: 
@@ -1416,7 +1416,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50cff37c2fb6ec8408f264ec7f78ae0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ballScript: {fileID: 754897450}
+  ball: {fileID: 754897449}
   startButtonText: {fileID: 1928338612}
   startTimeText: {fileID: 2017406064}
   pointScored: 0
