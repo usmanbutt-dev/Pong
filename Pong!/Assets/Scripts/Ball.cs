@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Ball : MonoBehaviour {
+    public GameController gameController;
     public Rigidbody2D rb;
     public float startingSpeed;
 
@@ -12,7 +13,8 @@ public class Ball : MonoBehaviour {
     private AudioSource audioSource;
 
     void Start() {
-        audioSource = GetComponent<AudioSource>();  // Get the AudioSource component on the ball
+        transform.position = new Vector2(0f, 0f);
+        audioSource = GetComponent<AudioSource>();
         bool isRight = UnityEngine.Random.value >= 0.5f;
         float xVelocity = -1f;
 
@@ -32,6 +34,15 @@ public class Ball : MonoBehaviour {
             audioSource.PlayOneShot(paddleHitSound);
             float yVelocity = UnityEngine.Random.Range(-1.5f, 1.5f);
             rb.velocity = new Vector2(rb.velocity.x, yVelocity * startingSpeed);
+        }
+
+        if (collision.gameObject.CompareTag("RightBorder")) {
+            //Player 1 winning condition
+            gameController.pointScored = true;
+        }
+        if (collision.gameObject.CompareTag("LeftBorder")) {
+            //Player 2 winning condition
+            gameController.pointScored = true;
         }
     }
 }
