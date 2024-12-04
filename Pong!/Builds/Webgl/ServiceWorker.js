@@ -1,9 +1,9 @@
-const cacheName = "DefaultCompany-Pong!-1.0";
+const cacheName = "GameDevCompany-Pong!-1.0";
 const contentToCache = [
-    "Build/Builds.loader.js",
-    "Build/Builds.framework.js.br",
-    "Build/Builds.data.br",
-    "Build/Builds.wasm.br",
+    "Build/Webgl.loader.js",
+    "Build/Webgl.framework.js",
+    "Build/Webgl.data",
+    "Build/Webgl.wasm",
     "TemplateData/style.css"
 
 ];
