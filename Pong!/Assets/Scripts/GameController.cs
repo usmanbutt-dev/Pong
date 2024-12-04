@@ -6,50 +6,100 @@ public class GameController : MonoBehaviour {
     public GameObject ball;
     public TextMeshProUGUI startButtonText;
     public TextMeshProUGUI startTimeText;
+    public TextMeshProUGUI scoreText;
+
     private bool gameStarted = false;
     private bool isPaused = false;
-    public bool pointScored = false;
+    private bool waitingForRestart = false;
+
+    // Track scores for both players
+    private int player1Score = 0;
+    private int player2Score = 0;
 
     void Update() {
-        if (Input.GetKeyDown(KeyCode.Space) && !gameStarted) {
-            startButtonText.enabled = false;
-            startTimeText.enabled = true;
-            StartCoroutine(StartCountdown());
-            gameStarted = true;
+        UpdateScoreDisplay();
+
+        if (!gameStarted && !waitingForRestart && Input.GetKeyDown(KeyCode.Space)) {
+            StartGame();
         }
 
-        if(pointScored) {
-            ball.SetActive(false);
-            gameStarted = false;
-            startButtonText.enabled = true;
-            pointScored = false;
+        // Wait for spacebar press after point is scored
+        if (waitingForRestart && Input.GetKeyDown(KeyCode.Space)) {
+            waitingForRestart = false;  // Reset flag
+            StartCoroutine(StartCountdown());
         }
 
         if (Input.GetKeyDown(KeyCode.P) && gameStarted) {
-            if (isPaused) {
-                ResumeGame();
-            }
-            else {
-                PauseGame();
-            }
+            TogglePause();
         }
     }
 
-    IEnumerator StartCountdown() {
+    // Update score display every frame before the game starts
+    private void UpdateScoreDisplay() {
+        if (!gameStarted && !waitingForRestart) {
+            scoreText.text = $"{player1Score} - {player2Score}";
+        }
+    }
+
+    // Starts the game and triggers countdown
+    private void StartGame() {
+        startButtonText.enabled = false;
+        startTimeText.enabled = true;
+        StartCoroutine(StartCountdown());
+        gameStarted = true;
+    }
+
+    // Starts countdown before restarting the round
+    private IEnumerator StartCountdown() {
+        startButtonText.enabled = false;
+        startTimeText.enabled = true;
         for (int i = 3; i > 0; i--) {
             startTimeText.text = i.ToString();
             yield return new WaitForSeconds(1f);
         }
         startTimeText.enabled = false;
         ball.SetActive(true);
+        Ball ballScript = ball.GetComponent<Ball>();
+        ballScript.ResetBall();  // Call method to reset the ball's velocity and direction
     }
 
-    void PauseGame() {
+    // Handle point scoring
+    public void AddPoint(int playerNumber) {
+        if (playerNumber == 1) {
+            player1Score++;
+        }
+        else if (playerNumber == 2) {
+            player2Score++;
+        }
+        scoreText.text = $"{player1Score} - {player2Score}";
+    }
+
+    // Triggered after a point is scored, preparing for next round
+    public void TriggerPointScored() {
+        ball.SetActive(false);  // Deactivate the ball
+        startButtonText.enabled = true;
+        ball.transform.position = Vector2.zero;  // Reset position
+        waitingForRestart = true;  // Wait for spacebar press
+    }
+
+    // Toggle pause state of the game
+    private void TogglePause() {
+        if (isPaused) {
+            ResumeGame();
+        }
+        else {
+            PauseGame();
+        }
+    }
+
+    // Pause the game
+    private void PauseGame() {
         Time.timeScale = 0f;
         isPaused = true;
     }
 
-    void ResumeGame() {
+    // Resume the game
+    private void ResumeGame() {
         Time.timeScale = 1f;
         isPaused = false;
     }
