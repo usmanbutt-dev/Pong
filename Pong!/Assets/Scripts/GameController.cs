@@ -7,6 +7,7 @@ public class GameController : MonoBehaviour {
     public TextMeshProUGUI startButtonText;
     public TextMeshProUGUI startTimeText;
     public TextMeshProUGUI scoreText;
+    public GameObject pauseCanvas;
 
     private bool gameStarted = false;
     private bool isPaused = false;
@@ -16,6 +17,9 @@ public class GameController : MonoBehaviour {
     private int player1Score = 0;
     private int player2Score = 0;
 
+    private void Awake() {
+        Time.timeScale = 1f;
+    }
     void Update() {
         UpdateScoreDisplay();
 
@@ -29,7 +33,7 @@ public class GameController : MonoBehaviour {
             StartCoroutine(StartCountdown());
         }
 
-        if (Input.GetKeyDown(KeyCode.P) && gameStarted) {
+        if (Input.GetKeyDown(KeyCode.Escape) && gameStarted) {
             TogglePause();
         }
     }
@@ -58,6 +62,7 @@ public class GameController : MonoBehaviour {
             yield return new WaitForSeconds(1f);
         }
         startTimeText.enabled = false;
+        scoreText.enabled = false;
         ball.SetActive(true);
         Ball ballScript = ball.GetComponent<Ball>();
         ballScript.ResetBall();  // Call method to reset the ball's velocity and direction
@@ -78,6 +83,7 @@ public class GameController : MonoBehaviour {
     public void TriggerPointScored() {
         ball.SetActive(false);  // Deactivate the ball
         startButtonText.enabled = true;
+        scoreText.enabled = true;
         ball.transform.position = Vector2.zero;  // Reset position
         waitingForRestart = true;  // Wait for spacebar press
     }
@@ -94,12 +100,14 @@ public class GameController : MonoBehaviour {
 
     // Pause the game
     private void PauseGame() {
+        pauseCanvas.SetActive(true);
         Time.timeScale = 0f;
         isPaused = true;
     }
 
     // Resume the game
     private void ResumeGame() {
+        pauseCanvas.SetActive(false);
         Time.timeScale = 1f;
         isPaused = false;
     }
