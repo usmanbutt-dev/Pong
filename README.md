@@ -64,6 +64,7 @@ This version includes **1v1 local multiplayer**, a fun and responsive **Player v
 
 ```bash
 git clone https://github.com/usmanbutt-dev/pong.git
+```
 
 ---
 
